@@ -22,9 +22,20 @@
 
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
-                const listItem = document.createElement('li');
-                listItem.textContent = file.name;
-                fileList.appendChild(listItem);
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('https://api.ufile.io/upload', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json()).then(data => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = data.file.url;
+                    link.textContent = file.name;
+                    listItem.appendChild(link);
+                    fileList.appendChild(listItem);
+                });
             }
         });
     </script>
