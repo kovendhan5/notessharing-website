@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Semester 4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        .subject-buttons {
+            text-align: center;
+        }
+        
+        .subject-buttons button[type="button"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        
+        .subject-buttons button[type="button"]:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Add styles for new pages */
+        .file-upload {
+            margin-top: 20px;
+        }
+        
+        .file-upload input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .file-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .file-list li:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .file-list li .file-name {
+            font-weight: bold;
+        }
+        
+        .file-list li .file-actions {
+            float: right;
+        }
+        
+        .file-list li .file-actions button[type="button"] {
+            background-color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .file-list li .file-actions button[type="button"]:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Semester 1</h1>
+        <div class="subject-buttons">
+            <button type="button" onclick="location.href='python.html'">PYTHON</button>
+        </div>
+    </div>
+    
+    <!-- Create new pages for each subject -->
+    <div class="container" id="os-page" style="display: none;">
+        <h1> PYTHON </h1>
+        <div class="file-upload">
+            <input type="file" id="os-file" multiple>
+            <button type="button" onclick="uploadFile('os')">Upload File</button>
+        </div>
+        <ul class="file-list" id="os-file-list">
+            <!-- File list will be populated here -->
+        </ul>
+    </div>
+    <script>
+        // Show the corresponding page when a button is clicked
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.subject-buttons button[type="button"]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent navigation to different HTML pages
+            // Hide all pages
+            document.querySelectorAll('.container:not(#subject-buttons)').forEach(function(page) {
+                page.style.display = 'none';
+            });
+            
+            // Display the corresponding page
+            displayPage(button.textContent.toLowerCase());
+        });
+    });
+});
+
+var currentPage = null;
+
+function displayPage(subject) {
+    if (currentPage) {
+        currentPage.style.display = 'none';
+    }
+    var newPage = document.getElementById(subject + '-page');
+    if (newPage) {
+        newPage.style.display = 'block';
+        currentPage = newPage;
+    }
+}
+
+// TO DO: Implement file upload functionality using JavaScript and server-side language (e.g. PHP)
+function uploadFile(subject) {
+    console.log(`Uploading file to ${subject} page`);
+    // Replace this with actual file upload functionality
+}
+    </script>
+
+</body>
+</html>

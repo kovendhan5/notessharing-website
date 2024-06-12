@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        
+        header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 30px;
+            font-weight: 600;
+            margin-right: 20px;
+        }
+        
+        header nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        header nav ul {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header nav li {
+            margin-right: 20px;
+        }
+        
+        header nav li a {
+            text-decoration: none;
+            color: #fff;
+            transition: color 0.2s ease;
+        }
+        
+        header nav li a:hover {
+            color: #ccc;
+        }
+        
+       .search-bar {
+            margin-left: 20px;
+        }
+        
+       .search-bar input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 16px;
+        }
+        
+       .search-bar button[type="button"] {
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+       .search-bar button[type="button"]:hover {
+            background-color: #1abc9c;
+        }
+        
+       .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+       .code-input {
+            margin-bottom: 20px;
+        }
+        
+       .code-input label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+       .code-input input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+       .code-input textarea {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            height: 200px;
+        }
+        
+       .semester-buttons {
+            text-align: center;
+        }
+        
+       .semester-buttons button[type="button"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        
+       .semester-buttons button[type="button"]:hover {
+            background-color: #2980b9;
+        }
+        
+       .upload-form {
+            display: block;
+        }
+        
+       .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+       .file-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+       .file-list li:last-child {
+            border-bottom: none;
+        }
+        
+       .file-list li button[type="button"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        
+       .file-list li button[type="button"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+  <div class="container" style="background-color: #23d5e9;">
+    <h1>OPERATING SYSTEM</h1>
+    
+    <div class="container">
+        <div id="upload-form" class="upload-form">
+            <h2>Upload File</h2>
+            <form>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title"><br><br>
+                <label for="code">Code:</label>
+                <textarea id="code" name="code"></textarea><br><br>
+                <label for="file">File:</label>
+                <input type="file" id="file" name="file"><br><br>
+                <button type="button" id="upload-btn">Upload</button>
+            </form>
+        </div>
+        <div id="file-list-container">
+            <h2>File List</h2>
+            <ul id="file-list" class="file-list">
+                <!-- file list will be displayed here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Upload functionality
+        const uploadForm = document.getElementById('upload-form');
+        const uploadBtn = document.getElementById('upload-btn');
+        const titleInput = document.getElementById('title');
+        const codeInput = document.getElementById('code');
+        const fileInput = document.getElementById('file');
+      
+        uploadBtn.addEventListener('click', () => {
+          const username = prompt('Enter username:');
+          const password = prompt('Enter password:');
+      
+          if (username === 'admin' && password === 'password123') {
+            const formData = new FormData();
+            formData.append('title', titleInput.value);
+            formData.append('code', codeInput.value);
+            formData.append('file', fileInput.files[0]);
+      
+            fetch('/upload', {
+              method: 'POST',
+              body: formData,
+            })
+           .then((response) => response.text())
+           .then((data) => {
+              console.log(data);
+              // Add the uploaded file to the file list
+            })
+           .catch((error) => {
+              console.error(error);
+            });
+          } else {
+            alert('Invalid username or password');
+          }
+        });
+      
+        // Edit file
+        function editFile(listItem) {
+          const titleInput = listItem.querySelector('h3');
+          const codeInput = listItem.querySelector('p:nth-child(2)');
+          const editBtn = listItem.querySelector('.edit-btn');
+      
+          const newTitle = prompt('Enter new title:', titleInput.textContent);
+          const newCode = prompt('Enter new code:', codeInput.textContent);
+      
+          const username = prompt('Enter username:');
+          const password = prompt('Enter password:');
+      
+          if (username === 'admin' && password === 'password123') {
+            fetch(`/edit/${titleInput.textContent}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ newTitle, newCode }),
+            })
+           .then((response) => response.text())
+           .then((data) => {
+              console.log(data);
+              titleInput.textContent = newTitle;
+              codeInput.textContent = newCode;
+            })
+           .catch((error) => {
+              console.error(error);
+            });
+          } else {
+            alert('Invalid username or password');
+          }
+        }
+      
+        // Delete file
+        function deleteFile(listItem) {
+          const title = listItem.querySelector('h3').textContent;
+      
+          const username = prompt('Enter username:');
+          const password = prompt('Enter password:');
+      
+          if (username === 'admin' && password === 'password123') {
+            fetch(`/delete/${title}`, {
+              method: 'DELETE',
+            })
+           .then((response) => response.text())
+           .then((data) => {
+              console.log(data);
+              listItem.remove();
+            })
+           .catch((error) => {
+              console.error(error);
+            });
+          } else {
+            alert('Invalid username or password');
+          }
+        }
+      </script>
+</body>
+</html> 
