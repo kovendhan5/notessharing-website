@@ -217,7 +217,7 @@
             formData.append('code', codeInput.value);
             formData.append('file', fileInput.files[0]);
       
-            fetch('/upload', {
+            fetch('http://localhost:3000/upload', {
               method: 'POST',
               body: formData,
             })
@@ -247,7 +247,7 @@
           const password = prompt('Enter password:');
       
           if (username === 'admin' && password === 'password123') {
-            fetch(`/edit/${titleInput.textContent}`, {
+            fetch(`http://localhost:3000/edit/${titleInput.textContent}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -276,7 +276,7 @@
           const password = prompt('Enter password:');
       
           if (username === 'admin' && password === 'password123') {
-            fetch(`/delete/${title}`, {
+            fetch(`http://localhost:3000/delete/${title}`, {
               method: 'DELETE',
             })
            .then((response) => response.text())
