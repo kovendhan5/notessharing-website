@@ -1,5 +1,10 @@
-const CLIENT_ID = '';
-const API_KEY = '';
+require('dotenv').config();
+
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const API_KEY = process.env.GOOGLE_API_KEY;
+
+// Use googleClientId and googleApiKey in your application
+
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
