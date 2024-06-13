@@ -9,14 +9,15 @@ app = Flask(__name__)
 
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
-SERVICE_ACCOUNT_FILE = 'client_secret.json'
+SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE')
+
 
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=creds)
 
 # Folder ID where files will be uploaded
-FOLDER_ID = 'your_google_drive_folder_id'
+FOLDER_ID = os.getenv('FOLDER_ID')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
