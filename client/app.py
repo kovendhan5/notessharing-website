@@ -73,7 +73,7 @@ def upload_file():
         if file.mimetype not in ['application/pdf', 'image/jpeg', 'image/png']:
             return jsonify({"error": "Invalid file type"}), 400
         if file:
-            file_path = os.path.join('/tmp', file.filename)
+            file_path = os.path.join('/tmp', secure_filename(file.filename))
             file.save(file_path)
             file_metadata = {
                 'name': file.filename,
@@ -118,6 +118,31 @@ def list_files():
                 lambda results: results.get('nextPageToken')):
             files.extend(results.get('files', []))
         cache_set(cache_key, files)
+@app.route('/files', methods=['GET'])
+@limiter.limit("10 per minute")
+def list_files():
+    try:
+        files = []
+        filter_query = request.args.get('filter', '')
+        sort_order = request.args.get('sort', 'name')
+        # Validate sort_order
+        if sort_order not in ['name', 'createdTime', 'modifiedTime']:
+            return jsonify({"error": "Invalid sort parameter"}), 400
+        # Validate filter_query
+        if not isinstance(filter_query, str):
+            return jsonify({"error": "Invalid filter parameter"}), 400
+        cache_key = f"{filter_query}_{sort_order}"
+        cached_files = cache_get(cache_key)
+        if cached_files:
+            return jsonify(cached_files), 200
+        for results in iter(lambda: drive_service.files().list(
+                q=f"'{FOLDER_ID}' in parents and name contains '{filter_query}'",
+                orderBy=sort_order,
+                pageSize=10, fields="nextPageToken, files(id, name)",
+                pageToken=None if not files else files[-1].get('nextPageToken')).execute(),
+                lambda results: results.get('nextPageToken')):
+            files.extend(results.get('files', []))
+        cache_set(cache_key, files)
         return jsonify(files), 200
     except HttpError as e:
         logging.error(f"Google Drive API error: {e}")
@@ -125,6 +150,3 @@ def list_files():
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
         return jsonify({"error": "An unexpected error occurred"}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)

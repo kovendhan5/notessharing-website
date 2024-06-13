@@ -39,69 +39,50 @@ function updateSigninStatus(isSignedIn) {
 }
 
 function uploadFile(event) {
-    const file = event.target.files[0];
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify({
-      'name': file.name,
-      'mimeType': file.type
-    })], { type: 'application/json' }));
-    form.append('file', file);
-  
-    gapi.client.request({
-      'path': '/upload/drive/v3/files',
-      'method': 'POST',
-      'params': { 'uploadType': 'multipart' },
-      'headers': {
-        'Content-Type': 'multipart/related'
-      },
-      'body': form
-    }).then(function(response) {
-      console.log(response);
-      // Call function to display the file.
-    });
+  const file = event.target.files[0];
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify({
+    'name': file.name,
+    'mimeType': file.type
+  })], { type: 'application/json' }));
+  form.append('file', file);
+
+  // Validate file size and MIME type
+  if (file.size > 10 * 1024 * 1024) { // 10MB limit
+    alert('File size exceeds 10MB limit');
+    return;
   }
-  
-  function listFiles() {
-    gapi.client.drive.files.list({
-      'pageSize': 10,
-      'fields': "nextPageToken, files(id, name)"
-    }).then(function(response) {
-      const files = response.result.files;
-      if (files && files.length > 0) {
-        const fileList = document.getElementById('fileList');
-        fileList.innerHTML = '';
-        files.forEach(function(file) {
-          const li = document.createElement('li');
-          li.textContent = file.name;
-          fileList.appendChild(li);
-        });
-      }
-    });
+
+  if (!['application/pdf', 'image/jpeg', 'image/png'].includes(file.type)) {
+    alert('Invalid file type');
+    return;
   }
-  
-  function createFileElement(fileId, fileName) {
-    const fileList = document.getElementById('fileList');
-    const fileElement = document.createElement('li');
-    const fileLink = document.createElement('a');
-    fileLink.textContent = fileName;
-    fileLink.href = `https://drive.google.com/uc?id=${fileId}&export=download`;
-    fileLink.target = '_blank';
-  
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.onclick = function() { deleteFile(fileId); };
-  
-    fileElement.appendChild(fileLink);
-    fileElement.appendChild(deleteButton);
-    fileList.appendChild(fileElement);
-  }
-  
-  function deleteFile(fileId) {
-    gapi.client.drive.files.delete({
-      'fileId': fileId
-    }).then(function(response) {
-      console.log(response);
-      // Remove the file element from the list
-    });
-  }
-  
+
+  gapi.client.request({
+    'path': '/upload/drive/v3/files',
+    'method': 'POST',
+    'params': { 'uploadType': 'multipart' },
+    'headers': {
+      'Content-Type': 'multipart/related'
+    },
+    'body': form
+  }).then(function(response) {
+    console.log(response);
+    // Call function to display the file.
+  }).catch(function(error) {
+    console.error('Error uploading file:', error);
+  });
+}
+
+function listFiles() {
+  gapi.client.drive.files.list({
+    'pageSize': 10,
+    'fields': "nextPageToken, files(id, name, mimeType)"
+  }).then(function(response) {
+    const files = response.result.files;
+    console.log(files);
+    // Call function to display the file list.
+  }).catch(function(error) {
+    console.error('Error listing files:', error);
+  });
+}
