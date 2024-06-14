@@ -1,8 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: './.client/.env' });
 
-import gapi from 'gapi';
-import { auth2 } from 'gapi.auth2';
+const { gapi } = window;
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const API_KEY = process.env.GOOGLE_API_KEY;
@@ -12,8 +11,6 @@ const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
 export function handleClientLoad() {
   gapi.load('client:auth2', initClient);
-
-  auth2.init({ client_id: CLIENT_ID });
 }
 
 export function initClient() {
