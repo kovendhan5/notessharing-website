@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student File Sharing Platform</title>
+
 </head>
 <body>
     <h1>This is a student website</h1>
@@ -16,13 +17,14 @@
     <ul id="fileList"></ul>
 
     <!-- Link to your external JavaScript file -->
+    <script src="https://apis.google.com/js/api.js"></script>
      <script>
 
 const CLIENT_ID = '130258146268-8omlsvs6g2nmljr49gqes96mfjiif2jk.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
 const REDIRECT_URI = 'https://kovendhan5.github.io/need-for-code/';
 
-const auth = new google.auth.OAuth2(
+const auth = new google.auth2(
   CLIENT_ID,
   CLIENT_SECRET,
   REDIRECT_URI
@@ -33,6 +35,7 @@ const drive = google.drive('v3');
 let accessToken = null;
 
 function handleClientLoad() {
+    gapi.load('client:auth2', initClient);
   auth.authorize((err, tokens) => {
     if (err) {
       console.error(err);
@@ -42,6 +45,23 @@ function handleClientLoad() {
     console.log('Authenticated!');
     listFiles();
   });
+}
+
+function initClient() {
+    gapi.client.init({
+      apiKey: 'YOUR_API_KEY',
+      clientId: 'YOUR_CLIENT_ID',
+      discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+      scope: 'https://www.googleapis.com/auth/drive.file'
+    }).then(function () {
+      // Listen for sign-in state changes.
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+      // Handle the initial sign-in state.
+      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    }, function(error) {
+      console.error(JSON.stringify(error, null, 2));
+    });
 }
 
 function uploadFile(event) {
@@ -62,7 +82,7 @@ function uploadFile(event) {
     drive.files.create({
       requestBody: {
         'name': file.name,
-        'imeType': file.type
+        'mimeType': file.type
       },
       media: {
         mimeType: file.type,
@@ -136,5 +156,6 @@ document.getElementById('fileInput').addEventListener('change', uploadFile);
 
 document.getElementById('refreshButton').addEventListener('click', listFiles);
      </script>
+     <script async defer src="https://apis.google.com/js/api.js" onload="handleClientLoad()"></script>
 </body>
 </html>
