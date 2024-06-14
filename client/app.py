@@ -19,8 +19,8 @@ load_dotenv()
 
 # Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
-SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE')
-FOLDER_ID = os.getenv('FOLDER_ID')
+SERVICE_ACCOUNT_FILE = 'client.json'
+FOLDER_ID = '1Qo829EfSYq0Ds8welhFq2H0l0JiHw6qS'
 
 # Error handling for missing environment variables
 if not SERVICE_ACCOUNT_FILE or not FOLDER_ID:
@@ -150,3 +150,6 @@ def list_files():
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
