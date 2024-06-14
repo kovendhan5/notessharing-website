@@ -1,17 +1,5 @@
 const path = require('path');
-const os = require('os-browserify/browser');
-const crypto = require('crypto-browserify');
-
-module.exports = {
-  // ...
-  resolve: {
-    fallback: {
-      path: path,
-      os: os,
-      crypto: crypto
-    }
-  }
-};
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './app.js',
@@ -19,5 +7,14 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  mode: 'development'
+  mode: 'development',
+  resolve: {
+    fallback: {
+      os: require.resolve('os-browserify/browser'),
+      crypto: require.resolve('crypto-browserify')
+    }
+  },
+  plugins: [
+    new Dotenv()
+  ]
 };
