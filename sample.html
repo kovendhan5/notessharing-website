@@ -33,7 +33,7 @@ const drive = google.drive('v3');
 
 let accessToken = null;
 
-export function handleClientLoad() {
+function handleClientLoad() {
   auth.authorize((err, tokens) => {
     if (err) {
       console.error(err);
@@ -45,7 +45,7 @@ export function handleClientLoad() {
   });
 }
 
-export function uploadFile(event) {
+function uploadFile(event) {
   const file = event.target.files[0];
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify({
@@ -80,7 +80,7 @@ export function uploadFile(event) {
   });
 }
 
-export function listFiles() {
+function listFiles() {
   auth.getAccessToken((err, token) => {
     if (err) {
       console.error(err);
@@ -109,7 +109,7 @@ export function listFiles() {
   });
 }
 
-export function deleteFile(fileId) {
+function deleteFile(fileId) {
   auth.getAccessToken((err, token) => {
     if (err) {
       console.error(err);
