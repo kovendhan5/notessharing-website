@@ -1,5 +1,4 @@
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './app.js',
@@ -7,15 +6,5 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  mode: 'development',
-  resolve: {
-    fallback: {
-      os: require.resolve('os-browserify/browser'),
-      crypto: require.resolve('crypto-browserify'),
-      //path: require.resolve('path-browserify')
-    }
-  },
-  plugins: [
-    new Dotenv()
-  ]
+  mode: 'development'
 };
