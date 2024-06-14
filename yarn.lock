@@ -68,6 +68,18 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.5.tgz"
   integrity sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==
 
+"@types/gapi.auth2@^0.0.60":
+  version "0.0.60"
+  resolved "https://registry.npmjs.org/@types/gapi.auth2/-/gapi.auth2-0.0.60.tgz"
+  integrity sha512-KQiyTHRyAcat6marTRAixrkHhkS7mqclcbQvInfxyp7IeUDSUzLBlgH1s0SFaLl1m1jRY6b+qh4NMlmVm0wPEw==
+  dependencies:
+    "@types/gapi" "*"
+
+"@types/gapi@*", "@types/gapi@^0.0.47":
+  version "0.0.47"
+  resolved "https://registry.npmjs.org/@types/gapi/-/gapi-0.0.47.tgz"
+  integrity sha512-/ZsLuq6BffMgbKMtZyDZ8vwQvTyKhKQ1G2K6VyWCgtHHhfSSXbk4+4JwImZiTjWNXfI2q1ZStAwFFHSkNoTkHA==
+
 "@types/json-schema@*", "@types/json-schema@^7.0.8":
   version "7.0.15"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"

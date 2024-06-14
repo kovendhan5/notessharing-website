@@ -1,4 +1,8 @@
-require('dotenv').config({path: '.client\\.env'});
+import dotenv from 'dotenv';
+dotenv.config({ path: './.client/.env' });
+
+import gapi from 'gapi';
+import { auth2 } from 'gapi.auth2';
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const API_KEY = process.env.GOOGLE_API_KEY;
@@ -6,11 +10,13 @@ const API_KEY = process.env.GOOGLE_API_KEY;
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
-function handleClientLoad() {
+export function handleClientLoad() {
   gapi.load('client:auth2', initClient);
+
+  auth2.init({ client_id: CLIENT_ID });
 }
 
-function initClient() {
+export function initClient() {
   gapi.client.init({
     apiKey: API_KEY,
     clientId: CLIENT_ID,
@@ -32,7 +38,7 @@ function updateSigninStatus(isSignedIn) {
   }
 }
 
-function uploadFile(event) {
+export function uploadFile(event) {
   const file = event.target.files[0];
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify({
@@ -55,7 +61,7 @@ function uploadFile(event) {
   });
 }
 
-function listFiles() {
+export function listFiles() {
   gapi.client.drive.files.list({
     'pageSize': 10,
     'fields': "nextPageToken, files(id, name)"
@@ -98,3 +104,11 @@ function deleteFile(fileId) {
     // Remove the file element from the list
   });
 }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  handleClientLoad();
+});
+
+document.getElementById('fileInput').addEventListener('change', uploadFile);
+
+document.getElementById('refreshButton').addEventListener('click', listFiles);
